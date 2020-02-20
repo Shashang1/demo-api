@@ -3,8 +3,11 @@ var db = mongoose.connection;
 var constant = require('./constants')
 var models = require('../models/models')
 var userModel = models.userModel;
+var config = require('../config')
+var jwt = require('jsonwebtoken')
+
 function login(req, res){
-  var sessionData = req.session;
+  console.log(req.body.username, req.body.password)
   mongoose.connect(constant.databaseUrl, function(err){
     if (err) console.log(err)
     else {
@@ -18,8 +21,10 @@ function login(req, res){
               models.historyModel.update({userId:result._id},{$push: {loginHistory:Date.now()}},function(err){
                 if(err) console.log(err)
               })
-              sessionData.user = {username:req.body.username, data:ans}
-              res.json({status:"ok", ...sessionData.user})
+              console.log("ans.userId",ans.userId)
+              let response = {username:req.body.username, data:ans}
+              let token = jwt.sign({userId:ans.userId}, config.secret,{expiresIn:'1h'})
+              res.json({status:"ok", token:token, username:req.body.username, ...response})
             }
           })
         }

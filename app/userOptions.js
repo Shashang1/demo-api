@@ -3,11 +3,11 @@ var constant = require('./constants')
 var model = require('../models/models')
 
 function History(req, res){
-  if(req.session.user){
+  if(req.decoded.userId){
     mongoose.connect(constant.databaseUrl, function(err){
       if(err) console.log(err)
       else{
-        model.historyModel.findOne({userId:req.session.user.data.userId},function(err, result){
+        model.historyModel.findOne({userId:req.decoded.userId},function(err, result){
           if(err) console.log(err)
           else{
             res.json({status:"ok", loginhistory:result.loginHistory, logoutHistory:result.logoutHistory});
@@ -22,7 +22,8 @@ function History(req, res){
 }
 
 function find(req, res){
-  if(req.session.user!==undefined){
+  if(req.decoded.userId){
+    let mode = "normal"
     mongoose.connect(constant.databaseUrl, function(err){
       if(err) console.log(err)
       else{
@@ -55,7 +56,8 @@ function find(req, res){
 }
 
 function search(req, res){
-  if(!req.session.user){
+  console.log(req.session)
+  if(req.session.user){
     mongoose.connect(constant.databaseUrl,function(err){
       if (err) console.log(err)
       else if(req.query.position!==undefined && req.query.worksAt!==undefined){
@@ -75,7 +77,10 @@ function search(req, res){
         })
       }
       else{
-        res.json({status:"Bad",isfound:false})
+        model.detailModel.find(function(err, doc){
+          if (err) console.log(err)
+          else res.json(doc)
+        })
       }
     })
   }
