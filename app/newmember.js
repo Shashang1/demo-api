@@ -36,7 +36,7 @@ function addImage(req, res){
     form.parse(req, function(err, fields, files){
       var name = Date.now()
       var oldPath = files.file.path;
-      var newPath = "/home/rails/node-tranning/Demo/api/res/"+req.session.user.data.username+"-"+files.file.name;
+      var newPath = "./res/"+req.session.user.data.username+"-"+files.file.name;
       fs.rename(oldPath, newPath,function(err){
         if (err) res.json({status:err})
         else {
