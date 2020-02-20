@@ -12,10 +12,10 @@ exports.declare = (app) =>{
   app.options('*', cors());
   app.use(express.json())
   app.post('/login', urlencodedParser, auth.login)
-  app.get('/logout', auth.logout)
+  app.get('/logout', checkToken.validate, auth.logout)
   app.get('/history', checkToken.validate, userOptions.History)
   app.get('/user/:id', userOptions.find)
-  app.get('/search', userOptions.search)
+  app.get('/search', checkToken.validate, userOptions.search) 
   app.post('/signup',urlencodedParser, newmember.siginup)
   app.post('/signup/addImage', urlencodedParser, newmember.addImage)
 }

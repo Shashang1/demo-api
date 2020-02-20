@@ -3,6 +3,9 @@ const config = require('../config.js');
 
 let validate = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
+  if(token===undefined){
+    return res.json({status:"bad", token:"no token"})
+  }
   if (token.startsWith('Bearer ')) {
     token = token.slice(7, token.length);
   }

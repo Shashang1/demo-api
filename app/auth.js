@@ -37,21 +37,21 @@ function login(req, res){
 }
 
 function logout(req, res){
-  var sessionData = req.session;
-  if(sessionData.user){
+  console.log(req.decoded)
+  if(req.decoded.userId){
     mongoose.connect(constant.databaseUrl, function(err){
       if(err) console.log(err)
       else {
-        models.historyModel.update({userId:sessionData.user.data.userId}, {$push:{logoutHistory:Date.now()}},function(err){
+        models.historyModel.update({userId:req.decoded.userId}, {$push:{logoutHistory:Date.now()}},function(err){
           if(err) console.log(err)
+          else{
+            res.json({status:"ok"})
+          }
         })
       }
     })
   }
-  sessionData.destroy(function(err){
-    if (err) console.log(err)
-    else res.json({status:"ok"})
-  })
+  else res.json({status:"bad"})
 }
 
 

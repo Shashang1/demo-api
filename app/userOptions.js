@@ -23,7 +23,6 @@ function History(req, res){
 
 function find(req, res){
   if(req.decoded.userId){
-    let mode = "normal"
     mongoose.connect(constant.databaseUrl, function(err){
       if(err) console.log(err)
       else{
@@ -56,8 +55,8 @@ function find(req, res){
 }
 
 function search(req, res){
-  console.log(req.session)
-  if(req.session.user){
+  console.log(req.decoded)
+  if(req.decoded){
     mongoose.connect(constant.databaseUrl,function(err){
       if (err) console.log(err)
       else if(req.query.position!==undefined && req.query.worksAt!==undefined){
