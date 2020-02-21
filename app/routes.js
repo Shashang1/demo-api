@@ -14,9 +14,10 @@ exports.declare = (app) =>{
   app.post('/login', urlencodedParser, auth.login)
   app.get('/logout', checkToken.validate, auth.logout)
   app.get('/history', checkToken.validate, userOptions.History)
-  app.get('/user/:id', userOptions.find)
-  app.get('/search', checkToken.validate, userOptions.search) 
-  app.post('/signup',urlencodedParser, newmember.siginup)
+  app.get('/user/:id', checkToken.validate, userOptions.find)
+  app.get('/search', checkToken.validate, userOptions.search)
+  app.get('/seen', checkToken.validate, userOptions.seen) 
+  app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
   app.post('/signup/addImage', urlencodedParser, newmember.addImage)
 }
 

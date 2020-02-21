@@ -3,28 +3,42 @@ var constant = require('./constants')
 var model = require('../models/models')
 var formidable = require('formidable');
 var fs = require('fs');
+var express = require('express')
 
-function siginup(req, res){
+function createUser(req, res, next){
+  console.log(req.body)
   mongoose.connect(constant.databaseUrl, function(err){
     if (err) console.log(err)
     else{
-      let entry = new model.userModel({username:req.body.username})
-      entry.save()
-
-      model.userModel.findOne({username:req.body.username}, function(err, doc){
+      let entry = new model.userModel({username:req.body.username, password:req.body.password})
+      entry.save(function(err){
         if (err) console.log(err)
-        else {
-          let entry = new detailModel({userId:doc._id,
-          fname:req.body.fname,
-          lname:req.body.lname,
-          username:doc.username,
-          position:req.body.position,
-          worksAt:req.body.worksAt,
-          mode:"normal"
-          })
-          entry.save()
-        }
+        else next()
       })
+    }
+  })
+}
+
+function addDetail(req, res){
+  model.userModel.findOne({username:req.body.username}, function(err, doc){
+    if (err) console.log(err)
+    else {
+      let entryDetail = new model.detailModel({userId:doc._id,
+      fname:req.body.fname,
+      lname:req.body.lname,
+      username:doc.username,
+      position:req.body.position,
+      worksAt:req.body.worksAt,
+      mode:req.body.mode
+      })
+      entryDetail.save()
+      let entryHistory = new model.historyModel({userId:doc._id, loginHistory:[], logoutHistory:[]})
+      entryHistory.save()
+      if (req.body.mode ==="ghost"){
+        let entrySeen = new model.seenModel({userId:doc._id, seen:[]})
+        entrySeen.save()
+      }
+      res.json({signuped:true})
     }
   })
 }
@@ -36,7 +50,7 @@ function addImage(req, res){
     form.parse(req, function(err, fields, files){
       var name = Date.now()
       var oldPath = files.file.path;
-      var newPath = "./res/"+req.session.user.data.username+"-"+files.file.name;
+      var newPath = "./res/"+req.session.user.data.username+"-"+Date.now()+files.file.name;
       fs.rename(oldPath, newPath,function(err){
         if (err) res.json({status:err})
         else {
@@ -62,4 +76,4 @@ function addImage(req, res){
 }
 
 
-module.exports = {siginup, addImage};
+module.exports = {createUser, addImage, addDetail};
