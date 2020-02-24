@@ -18,6 +18,6 @@ exports.declare = (app) =>{
   app.get('/search', checkToken.validate, userOptions.search)
   app.get('/seen', checkToken.validate, userOptions.seen) 
   app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
-  app.post('/signup/addImage', urlencodedParser, newmember.addImage)
+  app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
 }
 

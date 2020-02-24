@@ -39,7 +39,8 @@ function find(req, res){
           fname:doc.fname, 
           lname:doc.lname, 
           position:doc.position,
-          worksAt:doc.worksAt, 
+          worksAt:doc.worksAt,
+          image:doc.image, 
           mode: doc.mode})
         }
       })

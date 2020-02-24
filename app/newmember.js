@@ -4,19 +4,37 @@ var model = require('../models/models')
 var formidable = require('formidable');
 var fs = require('fs');
 var express = require('express')
+var bcrypt = require('bcrypt')
 
 function createUser(req, res, next){
-  console.log(req.body)
-  mongoose.connect(constant.databaseUrl, function(err){
+  bcrypt.hash(req.body.password, 10, function(err, hash){
+    mongoose.connect(constant.databaseUrl, function(err){
     if (err) console.log(err)
     else{
-      let entry = new model.userModel({username:req.body.username, password:req.body.password})
+      let entry = new model.userModel({username:req.body.username, password:hash})
       entry.save(function(err){
         if (err) console.log(err)
         else next()
       })
     }
   })
+})
+  
+  
+  
+  
+  
+  
+  // mongoose.connect(constant.databaseUrl, function(err){
+  //   if (err) console.log(err)
+  //   else{
+  //     let entry = new model.userModel({username:req.body.username, password:req.body.password})
+  //     entry.save(function(err){
+  //       if (err) console.log(err)
+  //       else next()
+  //     })
+  //   }
+  // })
 }
 
 function addDetail(req, res){
@@ -44,35 +62,27 @@ function addDetail(req, res){
 }
 
 function addImage(req, res){
-  if(req.session.user){
-    console.log("started")
     var form = new formidable.IncomingForm()
     form.parse(req, function(err, fields, files){
+      if(err) console.log(err)
       var name = Date.now()
       var oldPath = files.file.path;
-      var newPath = "./res/"+req.session.user.data.username+"-"+Date.now()+files.file.name;
+      dbImageLink = 'http://localhost:5000/image/'+req.decoded.userId+".jpg";
+      var newPath = "./res/"+req.decoded.userId+".jpg";
       fs.rename(oldPath, newPath,function(err){
         if (err) res.json({status:err})
         else {
           mongoose.connect(constant.databaseUrl, function(err){
-            model.userModel.findOne({username:req.session.user.username}, function(err, doc){
+            model.detailModel.updateOne({userId:req.decoded.userId}, {image:dbImageLink}, function(err, doc){
               if (err) console.log(err)
               else {
-                console.log(req.session.user.data.userId)
-                model.imageModel.updateOne({userId:req.session.user.data.userId}, {image:newPath},function(err){
-                  if(err) console.log(err)
-                  else res.json({status:"ok"})
-                })
+                res.status(200).json({Uploaded:"ok"})
               }
             })
           })
         }
       })
     })
-  }
-  else{
-    res.json({status:"bad", isLogin:false})
-  }
 }
 
 
