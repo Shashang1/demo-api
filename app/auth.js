@@ -1,55 +1,30 @@
-var mongoose = require('mongoose')
-var constant = require('./constants')
-var models = require('../models/models')
-var userModel = models.userModel;
 var bcrypt = require('bcrypt')
 var config = require('../config')
 var jwt = require('jsonwebtoken')
+var user = require('../db-services/user')
+var history = require('../db-services/history')
+var detail = require('../db-services/detail')
 
-function login(req, res){
-  mongoose.connect(constant.databaseUrl, function(err){
-    if (err) console.log(err)
-    else {
-      userModel.findOne({username:req.body.username}, function(err,doc){
-        if(err) console.log(err)
-        else if(doc!==null){
-          bcrypt.compare(req.body.password, doc.password, function(err, result){
-            if(result){
-              models.detailModel.findOne({userId:doc._id}, function(err, ans){
-                if (err) console.log(err)
-                else {
-                  models.historyModel.update({userId:doc._id},{$push: {loginHistory:Date.now()}},function(err){
-                    if(err) console.log(err)
-                  })
-                  let response = {username:req.body.username, data:ans}
-                  let token = jwt.sign({userId:ans.userId, username:ans.username}, config.secret,{expiresIn:'1h'})
-                  res.json({status:"ok", token:token, username:req.body.username, ...response})
-                }
-              })
-            }
-            else {
-              res.json({status:"wrong", data:null})
-            } 
-          })
-        }
-        else res.json({status:"wrong", data:null})
-      })
+
+const login = async(req, res)=>{
+  const userData = await user.getUser(req.body.username)
+  const userDetail = userData?await detail.getUserDetail(userData._id):null
+  userData?bcrypt.compare(req.body.password, userData.password, function(err,result){
+    if(result){
+      history.addUserLoginHistory(userData._id)
+      let token = jwt.sign({userId:userDetail.userId, username:userDetail.username}, config.secret,{expiresIn:'1h'})
+      res.json({status:"ok", token:token, data:userDetail})
     }
-  })
+    else {
+      res.json({status:"bad"})
+    }
+  }):res.json({status:"bad"})
 }
 
-function logout(req, res){
-  mongoose.connect(constant.databaseUrl, function(err){
-    if(err) console.log(err)
-    else {
-      models.historyModel.update({userId:req.decoded.userId}, {$push:{logoutHistory:Date.now()}},function(err){
-        if(err) console.log(err)
-        else{
-          res.json({status:"ok"})
-        }
-      })
-    }
-  })
+const logout = async(req,res)=>{
+  history.addUserLogoutHistory(req.decoded.userId)
+  res.json({status:"ok"})
 }
+
 
 module.exports = {login, logout};

@@ -1,11 +1,11 @@
 var bodyParser = require('body-parser')
-var auth = require('./auth')
-var userOptions = require('./userOptions')
+var auth = require('../app/auth')
+var userOptions = require('../app/userOptions')
 var urlencodedParser = bodyParser.urlencoded({extended:false})
-var newmember = require('./newmember')
+// var newmember = require('../app/newmember')
 var cors = require('cors')
 var express = require('express')
-var checkToken = require('./checkToken')
+var checkToken = require('../app/checkToken')
 
 exports.declare = (app) =>{
   app.use(cors())
@@ -16,8 +16,8 @@ exports.declare = (app) =>{
   app.get('/history', checkToken.validate, userOptions.History)
   app.get('/user/:id', checkToken.validate, userOptions.find)
   app.get('/search', checkToken.validate, userOptions.search)
-  app.get('/seen', checkToken.validate, userOptions.seen) 
-  app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
-  app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
+  app.get('/seen', checkToken.validate, userOptions.profileSeen) 
+  // app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
+  // app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
 }
 

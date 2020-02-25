@@ -1,7 +1,13 @@
 var express = require('express')
 var app = express()
 var session = require('express-session')
-var route = require('./app/routes')
+var route = require('./routes/routes')
+var mongoose = require('mongoose')
+mongoose.set('useNewUrlParser',true)
+mongoose.set('useFindAndModify',false)
+mongoose.set('useCreateIndex', true)
+mongoose.set('useUnifiedTopology', true)
+mongoose.connect("mongodb://localhost:27017/linkdin").then(console.log("Connected"))
 
 app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { maxAge: 60000 }}))
 app.use('/image', express.static(__dirname +'/res'));
@@ -11,7 +17,9 @@ app.get("/", function(req, res){
 
 route.declare(app);
 
-app.listen(5000)  
+app.listen(5000, function(){
+  console.debug("app is listening at port 5000")
+})  
 
 
 
