@@ -1,5 +1,3 @@
-var mongoose = require('mongoose');
-var constant = require('./constants')
 var history = require('../db-services/history')
 var detail = require('../db-services/detail')
 var seen = require('../db-services/seen')
@@ -12,7 +10,6 @@ const History = async(req, res)=>{
 const find=async(req, res)=>{  
   const findDetail = await detail.getUserDetail(req.params.id)
   findDetail.mode==="ghost"?await seen.setSeen(findDetail.userId, req.decoded):null
-  console.log(findDetail)
   res.json({status:"ok", id:findDetail.userId, username:findDetail.username,fname:findDetail.fname,
     lname:findDetail.lname, position:findDetail.position, worksAt:findDetail.worksAt, 
     image:findDetail.image, mode:findDetail.mode

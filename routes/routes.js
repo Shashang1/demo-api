@@ -1,11 +1,11 @@
-var bodyParser = require('body-parser')
-var auth = require('../app/auth')
-var userOptions = require('../app/userOptions')
-var urlencodedParser = bodyParser.urlencoded({extended:false})
-// var newmember = require('../app/newmember')
-var cors = require('cors')
-var express = require('express')
-var checkToken = require('../app/checkToken')
+const bodyParser = require('body-parser')
+const auth = require('../app/auth')
+const userOptions = require('../app/userOptions')
+const urlencodedParser = bodyParser.urlencoded({extended:false})
+const cors = require('cors')
+const newmember = require('../app/newmember')
+const express = require('express')
+const checkToken = require('../app/checkToken')
 
 exports.declare = (app) =>{
   app.use(cors())
@@ -17,7 +17,7 @@ exports.declare = (app) =>{
   app.get('/user/:id', checkToken.validate, userOptions.find)
   app.get('/search', checkToken.validate, userOptions.search)
   app.get('/seen', checkToken.validate, userOptions.profileSeen) 
-  // app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
-  // app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
+  app.post('/signup',urlencodedParser, newmember.createUser, newmember.addDetail)
+  app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
 }
 

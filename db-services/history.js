@@ -13,3 +13,8 @@ exports.addUserLogoutHistory = async(userId)=> {
   await historyModel.updateOne({userId:userId},{$push:{logoutHistory:Date.now()}})
 }
 
+exports.createHistory = async(userId)=>{
+  const entry = new historyModel({userId:userId, loginHistory:[], logoutHistory:[]})
+  entry.save()
+}
+
