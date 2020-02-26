@@ -1,5 +1,3 @@
-const mongoose = require('mongoose')
-const constant = require('./constants')
 const formidable = require('formidable');
 const fs = require('fs');
 const bcrypt = require('bcrypt')
@@ -30,7 +28,6 @@ const addDetail = async(req, res)=>{
 }
 
 function addImage(req, res){
-
   var form = new formidable.IncomingForm()
   form.parse(req, function(err, fields, files){
     if(err) console.log(err)

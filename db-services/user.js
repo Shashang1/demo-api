@@ -2,7 +2,6 @@ var userModel = require('../models/userModel')
 
 
 exports.getUser = (username) =>{
-  console.log(username)
   return userModel.findOne({username:username},function(err){if (err) console.log(err)})
 }
 
