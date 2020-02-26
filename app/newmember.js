@@ -7,10 +7,10 @@ const user = require('../db-services/user')
 const detail = require('../db-services/detail')
 
 const  createUser = async(req, res, next)=>{
-  const hsh=await bcrypt.hash(req.body.password, 10)
-  const data =await user.setUser({username:req.body.username, password:hsh} )
-  .then(res=>res)
-  .catch(err=>console.log(err))
+  const hsh= await bcrypt.hash(req.body.password, 10)
+  const data = await user.setUser({username:req.body.username, password:hsh} )
+  .then(res => res)
+  .catch(err => console.log(err))
   data?next():res.json({status:'bad', username:"invalid"})
 }
 

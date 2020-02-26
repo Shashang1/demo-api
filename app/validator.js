@@ -1,4 +1,5 @@
 const {check ,validationResult} = require('express-validator')
+const user = require('../db-services/user')
 
 exports.loginValidatorArray = [
   check("username").isLength({min:4}).withMessage("username must be greater than 3 character"),
@@ -11,7 +12,13 @@ exports.loginValidator=(req,res,next)=>{
 } 
 
 exports.signupValidatorArray = [
-  check("username").isLength({min:4}),
+  check("username").isLength({min:4}).custom((value)=>{
+    return user.getUser(value).then(user=>{
+      if (user){
+        return Promise.reject("Username already in use")
+      }
+    })
+  }),
   check("password").isLength({min:8}),
   check('fname').not().isEmpty(),
   check('lname').not().isEmpty(),
@@ -22,5 +29,5 @@ exports.signupValidatorArray = [
 
 exports.signupvalidator = (req,res,next)=> {
   const err = validationResult(req)
-  err.isEmpty()?next():res.json({status:"bad", msg:"Invalid Inputs"})
+  err.isEmpty()?next():res.json({status:"bad", msg:err.errors[0].msg})
 }
