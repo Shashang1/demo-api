@@ -1,20 +1,19 @@
 var historyModel = require('../models/historyModel')
-var mongoose = require('mongoose')
 
 exports.getUserHistory = (userId) => {
   return historyModel.findOne({userId:userId})
 }
 
 exports.addUserLoginHistory = async(userId)=> {
-  await historyModel.updateOne({userId:userId},{$push:{loginHistory:Date.now()}})
+  await historyModel.updateOne({userId:userId},{loginHistory:Date.now()})
 }
 
 exports.addUserLogoutHistory = async(userId)=> {
-  await historyModel.updateOne({userId:userId},{$push:{logoutHistory:Date.now()}})
+  await historyModel.updateOne({userId:userId},{logoutHistory:Date.now()})
 }
 
 exports.createHistory = async(userId)=>{
-  const entry = new historyModel({userId:userId, loginHistory:[], logoutHistory:[]})
+  const entry = new historyModel({userId:userId, loginHistory:"", logoutHistory:""})
   entry.save()
 }
 

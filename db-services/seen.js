@@ -7,7 +7,7 @@ exports.getSeen = (userId)=> {
 
 exports.setSeen = (userId, seenUser)=>{
   return seenModel.updateOne({userId:userId},
-    {$push:{seen:{username:seenUser.username, userId:seenUser.userId, date:Date.now()}}})
+    {$push:{seen:{$each:[{username:seenUser.username, userId:seenUser.userId, date:Date.now()}], $position:0}}})
 }
 
 exports.createSeen = (userId) =>{
