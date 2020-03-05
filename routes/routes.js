@@ -7,6 +7,7 @@ const validator = require('../app/validator')
 const newmember = require('../app/newmember')
 const express = require('express')
 const checkToken = require('../app/checkToken')
+const utility = require('../utility')
 
 
 exports.declare = (app) =>{

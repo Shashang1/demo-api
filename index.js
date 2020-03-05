@@ -9,7 +9,7 @@ mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.connect("mongodb://localhost:27017/linkdin").then(console.log("Connected"))
 
-app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { maxAge: 60000 }}))
+
 app.use('/image', express.static(__dirname +'/res'));
 app.get("/", function(req, res){
   res.json({status:"connected"})
