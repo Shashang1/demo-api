@@ -17,3 +17,7 @@ exports.getFilteredUser = (data=null) =>{
   return detailModel.find(data);
 }
 
+exports.deleteUserDetails = (userId) =>{
+  return detailModel.deleteOne({userId:userId});
+}
+

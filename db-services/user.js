@@ -10,4 +10,6 @@ exports.setUser = (data)=>{
   return entry.save()
 }
 
-
+exports.deleteUser = (username) =>{
+  return userModel.deleteOne({username:username})
+}

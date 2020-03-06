@@ -17,3 +17,7 @@ exports.createHistory = async(userId)=>{
   entry.save()
 }
 
+exports.deleteHistory = async(userId)=>{
+  await historyModel.deleteOne({userId:userId})
+}
+

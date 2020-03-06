@@ -7,8 +7,7 @@ const validator = require('../app/validator')
 const newmember = require('../app/newmember')
 const express = require('express')
 const checkToken = require('../app/checkToken')
-const utility = require('../utility')
-
+const {deleteUser} = require('../deleteUser')
 
 exports.declare = (app) =>{
   app.use(cors())
@@ -22,5 +21,6 @@ exports.declare = (app) =>{
   app.get('/seen', checkToken.validate, userOptions.profileSeen) 
   app.post('/signup', urlencodedParser, validator.signupValidatorArray, validator.signupvalidator, newmember.createUser, newmember.addDetail)
   app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])
+  app.delete('/deleteuser',urlencodedParser,deleteUser)
 }
 
