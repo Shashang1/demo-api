@@ -3,8 +3,16 @@ var detail = require('../db-services/detail')
 var seen = require('../db-services/seen')
 
 const History = async(req, res)=>{
-  const result = await history.getUserHistory(req.decoded.userId)
-  res.json({status:"ok", loginhistory:result.loginHistory, logoutHistory:result.logoutHistory})
+  if(req.query.date){
+    const result = await history.getUserHistory(req.decoded.userId)
+    const login = await result.loginHistory.filter(item=>(new Date(item).toLocaleDateString()===req.query.date))
+    const logout = await result.logoutHistory.filter(item=>(new Date(item).toLocaleDateString()===req.query.date))
+    await res.json({status:'ok', loginhistory:login, logoutHistory:logout});
+  }
+  else {
+    const result = await history.getUserHistory(req.decoded.userId)
+    await res.json({status:"ok", loginhistory:result.loginHistory, logoutHistory:result.logoutHistory})
+  }
 }
 
 const find=async(req, res)=>{  

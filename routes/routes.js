@@ -17,7 +17,7 @@ exports.declare = (app) =>{
   app.get('/logout', checkToken.validate, auth.logout)
   app.get('/history', checkToken.validate, userOptions.History)
   app.get('/user/:id', checkToken.validate, userOptions.find)
-  app.get('/search', checkToken.validate, userOptions.search)
+  app.get('/search', checkToken.validate, urlencodedParser, userOptions.search)
   app.get('/seen', checkToken.validate, userOptions.profileSeen) 
   app.post('/signup', urlencodedParser, validator.signupValidatorArray, validator.signupvalidator, newmember.createUser, newmember.addDetail)
   app.post('/signup/addImage',[checkToken.validate, urlencodedParser, newmember.addImage])

@@ -5,15 +5,17 @@ exports.getUserHistory = (userId) => {
 }
 
 exports.addUserLoginHistory = async(userId)=> {
-  await historyModel.updateOne({userId:userId},{loginHistory:Date.now()})
+  const now = new Date;
+  await historyModel.updateOne({userId:userId},{$push:{loginHistory:now.toISOString()}})
 }
 
 exports.addUserLogoutHistory = async(userId)=> {
-  await historyModel.updateOne({userId:userId},{logoutHistory:Date.now()})
+  const now = new Date;
+  await historyModel.updateOne({userId:userId},{$push:{logoutHistory:now.toISOString()}})
 }
 
 exports.createHistory = async(userId)=>{
-  const entry = new historyModel({userId:userId, loginHistory:"", logoutHistory:""})
+  const entry = new historyModel({userId:userId, loginHistory:[], logoutHistory:[]})
   entry.save()
 }
 
