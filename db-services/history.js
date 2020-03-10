@@ -1,7 +1,29 @@
 var historyModel = require('../models/historyModel')
+var mon = require('mongoose')
 
-exports.getUserHistory = (userId) => {
+exports.getUserHistoryNoDate = (userId) => {
   return historyModel.findOne({userId:userId})
+}
+
+exports.getUserHistory = async(userId, date) =>{
+  var ndate = new Date(date).setDate(new Date(date).getDate()+1)
+  ndate = new Date(ndate).toISOString()
+  return await historyModel.aggregate(
+    [{$project: 
+      {
+        login:{$filter: {input: "$loginHistory", as: "loginhis", cond: {$and:[  
+          { $gt: [ "$$loginhis", date ]},
+          { $lt: [ "$$loginhis", ndate]}
+        ]}}},
+        userId:"$userId",
+        logout:{$filter: {input:"$logoutHistory", as: "logouthis", cond: {$and:[
+          { $gt: ["$$logouthis", date]},
+          { $lt: ["$$logouthis", ndate]}
+        ]}}}
+      }
+    }
+    ,{$match:{userId : mon.Types.ObjectId(userId)}}]
+  )
 }
 
 exports.addUserLoginHistory = async(userId)=> {
