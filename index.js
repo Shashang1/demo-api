@@ -2,17 +2,15 @@ var express = require('express')
 var app = express()
 var route = require('./routes/routes')
 
-
-console.log(process.env)
 const MONGOURL = process.env.MONGOLAB_URI ||
 process.env.MONGOHQ_URL ||
-"mongodb://localhost:27017/linkdin";
+"mongodb+srv://khal:sashang@123@cluster0-4gte8.mongodb.net/test?retryWrites=true&w=majority/linkdin";
 var mongoose = require('mongoose')
 mongoose.set('useNewUrlParser',true)
 mongoose.set('useFindAndModify',false)
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
-mongoose.connect(MONGOURL).catch(err => console.log(err))
+mongoose.connect(MONGOURL).catch(err => err?console.log(err):console.log("connected"))
 
 const port = process.env.PORT || 5000;
 
