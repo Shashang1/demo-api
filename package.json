@@ -24,6 +24,7 @@
     "formidable": "^1.2.1",
     "fs-extra": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.4",
     "multer": "^1.4.2",
     "ts-node": "^8.1.0",
     "until": "^0.1.1"
