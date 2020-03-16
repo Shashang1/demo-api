@@ -2,6 +2,8 @@ var express = require('express')
 var app = express()
 var route = require('./routes/routes')
 
+
+console.log(process.env.MONGOHQ_URL, process.env.MONGOLAB_URI)
 const MONGOURL = process.env.MONGOLAB_URI ||
 process.env.MONGOHQ_URL ||
 "mongodb://localhost:27017/linkdin";
