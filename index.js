@@ -14,7 +14,7 @@ mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.connect(MONGOURL).then(err =>console.log(err))
 
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 app.use('/image', express.static(__dirname +'/res')); 
 app.get("/", function(req, res){
