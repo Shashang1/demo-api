@@ -4,7 +4,7 @@ var route = require('./routes/routes')
 
 const MONGOURL = process.env.MONGOLAB_URI ||
 process.env.MONGOHQ_URL ||
-"mongodb+srv://khal:sashang@123@cluster0-4gte8.mongodb.net/test?retryWrites=true&w=majority/linkdin";
+"mongodb+srv://khal:sashang@123@cluster0-4gte8.mongodb.net/linkdin?retryWrites=true&w=majority";
 var mongoose = require('mongoose')
 mongoose.set('useNewUrlParser',true)
 mongoose.set('useFindAndModify',false)
