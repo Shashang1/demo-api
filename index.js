@@ -1,6 +1,5 @@
 var express = require('express')
 var app = express()
-var session = require('express-session')
 var route = require('./routes/routes')
 var mongoose = require('mongoose')
 mongoose.set('useNewUrlParser',true)
@@ -9,6 +8,7 @@ mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.connect("mongodb://localhost:27017/linkdin").then(console.log("Connected"))
 
+const port = process.env.port || 5000;
 
 app.use('/image', express.static(__dirname +'/res'));
 app.get("/", function(req, res){
@@ -17,7 +17,7 @@ app.get("/", function(req, res){
 
 route.declare(app);
 
-app.listen(5000, function(){
+app.listen(port, function(){
   console.debug("app is listening at port 5000")
 })  
 

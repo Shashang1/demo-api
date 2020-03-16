@@ -1,5 +1,5 @@
 var historyModel = require('../models/historyModel')
-var mon = require('mongoose')
+var mongoose = require('mongoose')
 
 exports.getUserHistoryNoDate = (userId) => {
   return historyModel.findOne({userId:userId})
@@ -9,20 +9,21 @@ exports.getUserHistory = async(userId, date) =>{
   var ndate = new Date(date).setDate(new Date(date).getDate()+1)
   ndate = new Date(ndate).toISOString()
   return await historyModel.aggregate(
-    [{$project: 
+    [{$match:{userId : mongoose.Types.ObjectId(userId)}},
+      {$project: 
       {
-        login:{$filter: {input: "$loginHistory", as: "loginhis", cond: {$and:[  
-          { $gt: [ "$$loginhis", date ]},
-          { $lt: [ "$$loginhis", ndate]}
+        login:{$filter: {input: "$loginHistory", as: "lh", cond: {$and:[  
+          { $gt: [ "$$lh", date ]},
+          { $lt: [ "$$lh", ndate]}
         ]}}},
         userId:"$userId",
-        logout:{$filter: {input:"$logoutHistory", as: "logouthis", cond: {$and:[
-          { $gt: ["$$logouthis", date]},
-          { $lt: ["$$logouthis", ndate]}
+        logout:{$filter: {input:"$logoutHistory", as: "lh", cond: {$and:[
+          { $gt: ["$$lh", date]},
+          { $lt: ["$$lh", ndate]}
         ]}}}
       }
     }
-    ,{$match:{userId : mon.Types.ObjectId(userId)}}]
+    ]
   )
 }
 
