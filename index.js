@@ -12,7 +12,7 @@ mongoose.set('useNewUrlParser',true)
 mongoose.set('useFindAndModify',false)
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
-mongoose.connect(MONGOURL).then(err =>console.log(err))
+mongoose.connect(MONGOURL).catch(err => console.log(err))
 
 const port = process.env.PORT || 5000;
 
