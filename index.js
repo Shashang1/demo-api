@@ -1,16 +1,20 @@
 var express = require('express')
 var app = express()
 var route = require('./routes/routes')
+
+const MONGOURL = process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+"mongodb://localhost:27017/linkdin";
 var mongoose = require('mongoose')
 mongoose.set('useNewUrlParser',true)
 mongoose.set('useFindAndModify',false)
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
-mongoose.connect("mongodb://localhost:27017/linkdin").then(console.log("Connected"))
+mongoose.connect(MONGOURL).then(err =>console.log(err))
 
 const port = process.env.port || 5000;
 
-app.use('/image', express.static(__dirname +'/res'));
+app.use('/image', express.static(__dirname +'/res')); 
 app.get("/", function(req, res){
   res.json({status:"connected"})
 })
@@ -18,7 +22,7 @@ app.get("/", function(req, res){
 route.declare(app);
 
 app.listen(port, function(){
-  console.debug("app is listening at port 5000")
+  console.debug("app is listening at port "+ port)
 })  
 
 
