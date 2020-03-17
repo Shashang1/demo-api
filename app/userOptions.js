@@ -40,5 +40,10 @@ const profileSeen = async(req,res)=>{
   res.json(result.seen)
 }
 
+const getDetail = async(req, res) => {
+  const result = await detail.getUserDetail(req.decoded.userId)
+  res.json({status:"ok", data:result})
+}
 
-module.exports = {History,find, search, profileSeen}
+
+module.exports = {History,find, search, profileSeen, getDetail}
