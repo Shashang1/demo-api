@@ -32,11 +32,17 @@ function addImage(req, res){
   form.parse(req, function(err, fields, files){
     if(err) console.log(err)
     var oldPath = files.file.path;
-    dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
+    const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     var newPath = "./res/"+req.decoded.userId+".jpg";
     console.log(oldPath, newPath)
     fs.rename(oldPath, newPath,function(err){
-      err?res.json({status:"bad"}):res.json({Uploaded:"ok"})
+      if(err) {
+        res.json({status:"bad"})
+      }
+      else{
+        detail.setUserImage(req.decoded.userId, dbImageLink)
+        res.json({Uploaded:"ok"})
+      }
     })
   })
 }
