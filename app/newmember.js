@@ -34,8 +34,16 @@ const addImage= async(req, res)=>{
     var oldPath = files.file.path;
     const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     var newPath = "./res/"+req.decoded.userId+".jpg";
-    const result = await mv(oldPath, newPath)
-    console.log(result)
+    const res = await mv(oldPath, newPath,function(err){
+      if(err) {
+        console.log(err)
+        res.json({status:"bad", error:err})
+      }
+      else{
+        detail.setUserImage(req.decoded.userId, dbImageLink)
+        res.json({Uploaded:"ok"})
+      }
+    })
   })
 }
 

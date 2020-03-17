@@ -9,8 +9,8 @@ exports.setUserDetail = (data) =>{
   return entry.save()
 }
 
-exports.setUserImage = (userId, imgUrl) =>{
-  return detailModel.updateOne({userId:userId}, {image:imgUrl})
+exports.setUserImage = async(userId, imgUrl) =>{
+  return await detailModel.updateOne({userId:userId}, {image:imgUrl})
 }
 
 exports.getFilteredUser = (data=null) =>{
