@@ -27,23 +27,15 @@ const addDetail = async(req, res)=>{
   }
 }
 
-function addImage(req, res){
+const addImage= async(req, res)=>{
   var form = new formidable.IncomingForm()
   form.parse(req, function(err, fields, files){
     if(err) console.log(err)
     var oldPath = files.file.path;
     const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     var newPath = "./res/"+req.decoded.userId+".jpg";
-    mv(oldPath, newPath,function(err){
-      if(err) {
-        console.log(err)
-        res.json({status:"bad", error:err})
-      }
-      else{
-        detail.setUserImage(req.decoded.userId, dbImageLink)
-        res.json({Uploaded:"ok"})
-      }
-    })
+    const result = await mv(oldPath, newPath)
+    console.log(result)
   })
 }
 
