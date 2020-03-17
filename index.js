@@ -23,6 +23,7 @@ route.declare(app);
 
 app.listen(port, function(){
   console.debug("app is listening at port "+ port)
+  console.log()
 })  
 
 
