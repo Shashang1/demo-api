@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const fs = require('fs');
+const mv = require('mv');
 const bcrypt = require('bcrypt')
 const seen = require('../db-services/seen')
 const history = require('../db-services/history')
@@ -34,7 +34,7 @@ function addImage(req, res){
     var oldPath = files.file.path;
     const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     var newPath = "./res/"+req.decoded.userId+".jpg";
-    fs.rename(oldPath, newPath,function(err){
+    mv(oldPath, newPath,function(err){
       if(err) {
         console.log(err)
         res.json({status:"bad", error:err})
