@@ -14,7 +14,3 @@ exports.createSeen = (userId) =>{
   const entry = new seenModel({userId:userId, seen:[]})
   entry.save()
 }
-
-exports.deleteSeen = (userId) =>{
-  return seenModel.deleteOne({userId:userId})
-}
