@@ -36,7 +36,7 @@ function addImage(req, res){
     var newPath = "./res/"+req.decoded.userId+".jpg";
     fs.rename(oldPath, newPath,function(err){
       if(err) {
-        res.json({status:"bad"})
+        res.json({status:"bad", error:err})
       }
       else{
         detail.setUserImage(req.decoded.userId, dbImageLink)
