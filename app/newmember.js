@@ -35,10 +35,10 @@ const addImage= (req, res)=>{
     const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     if(!files.file){
       res.json({status:"bad", msg:"no Image"})
-      return
     }
-    var newPath = "./res/"+req.decoded.userId+".jpg";
-    mv(oldPath, newPath,function(err){
+    else{
+      var newPath = "./res/"+req.decoded.userId+".jpg";
+      mv(oldPath, newPath,function(err){
       if(err) {
         console.log(err)
         res.json({status:"bad", error:err})
@@ -48,6 +48,7 @@ const addImage= (req, res)=>{
         res.json({Uploaded:"ok"})
       }
     })
+    }
   })
 }
 
