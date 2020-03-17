@@ -34,6 +34,7 @@ function addImage(req, res){
     var oldPath = files.file.path;
     dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     var newPath = "./res/"+req.decoded.userId+".jpg";
+    console.log(oldPath, newPath)
     fs.rename(oldPath, newPath,function(err){
       err?res.json({status:"bad"}):res.json({Uploaded:"ok"})
     })
