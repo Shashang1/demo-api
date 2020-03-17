@@ -51,5 +51,4 @@ const addImage= (req, res)=>{
     }
   })
 }
-
 module.exports = {createUser, addImage, addDetail};
