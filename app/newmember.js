@@ -31,10 +31,10 @@ const addImage= (req, res)=>{
   var form = new formidable.IncomingForm()
   form.parse(req, function(err, fields, files){
     if(err) console.log(err)
-    var oldPath = files.file.path;
-    const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
     if(files.file){
-      var newPath = "./res/"+req.decoded.userId+".jpg";
+      const oldPath = files.file.path;
+      const dbImageLink = 'https://whispering-temple-25296.herokuapp.com/image/'+req.decoded.userId+".jpg";
+      const newPath = "./res/"+req.decoded.userId+".jpg";
       mv(oldPath, newPath,function(err){
         if(err) {
           console.log(err)
